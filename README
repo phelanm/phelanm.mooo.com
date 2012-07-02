@@ -1,0 +1,123 @@
+### make free website, phelanm.mooo.com
+ ##  local rack app
+ ##  push to heroku
+ ##  push to github
+ ##  update phelanm.mooo.com on freedns.afraid.org
+
+
+ ##  local rack app
+  mjp@uberwald:~/src/phelanm.mooo.com$ cat Gemfile
+   source 'http://rubygems.org'
+   gem 'rack'
+  mjp@uberwald:~/src/phelanm.mooo.com$ cat config.ru
+   run lambda {
+     |env| [
+       200,
+       {'Content-Type'=>'text/html'},
+       StringIO.new("<html><head><title>phelanm.mooo.com</title></head><body>phelanm, thanks <a href=\"http://freedns.afraid.org\"> afraid.org</a></body></html>")
+     ]
+   }
+  mjp@uberwald:~/src/phelanm.mooo.com$ bundle install
+   Using rack (1.4.1) 
+   Using bundler (1.2.0.pre.1) 
+   Your bundle is complete! It was installed into /home/mjp/.rvm/gems/ruby-1.9.3-p194
+  mjp@uberwald:~/src/phelanm.mooo.com$ rackup -p 9292 config.ru &
+  mjp@uberwald:~/src/phelanm.mooo.com$ curl "http://localhost:9292"
+   127.0.0.1 - - [01/Jul/2012 20:39:53] "GET / HTTP/1.1" 200 - 0.0004
+   <html><head><title>phelanm.mooo.com</title></head><body>phelanm, thanks <a href="http://freedns.afraid.org"> afraid.org</a></body></html>
+
+ ##  push to heroku
+  mjp@uberwald:~/src/phelanm.mooo.com$ git init
+   Initialized empty Git repository in /home/mjp/src/phelanm.mooo.com/.git/
+  mjp@uberwald:~/src/phelanm.mooo.com$ git add .
+  mjp@uberwald:~/src/phelanm.mooo.com$ git commit -m 'init rack app'
+   [master (root-commit) cd45871] init rack app
+    4 files changed, 22 insertions(+)
+    create mode 100644 .bundle/config
+    create mode 100644 Gemfile
+    create mode 100644 Gemfile.lock
+    create mode 100644 README
+    create mode 100644 config.ru
+  mjp@uberwald:~$ heroku login
+   Enter your Heroku credentials.
+   Email: phelanm@gmail.com
+   Password (typing will be hidden): 
+   Authentication successful.
+  mjp@uberwald:~/src/phelanm.mooo.com$ heroku create
+   Creating smooth-flower-9514... done, stack is cedar
+   http://smooth-flower-9514.herokuapp.com/ | git@heroku.com:smooth-flower-9514.git
+   Git remote heroku added
+    !    New default stack: Cedar. To use Bamboo, run `heroku create -s bamboo`.
+  mjp@uberwald:~/src/phelanm.mooo.com$ git push heroku master
+   Counting objects: 8, done.
+   Delta compression using up to 2 threads.
+   Compressing objects: 100% (4/4), done.
+   Writing objects: 100% (8/8), 756 bytes, done.
+   Total 8 (delta 0), reused 0 (delta 0)
+   
+   -----> Heroku receiving push
+   -----> Ruby/Rack app detected
+   -----> Installing dependencies using Bundler version 1.2.0.pre
+          Running: bundle install --without development:test --path vendor/bundle --binstubs bin/ --deployment
+          Fetching gem metadata from http://rubygems.org/..
+          Installing rack (1.4.1)
+          Using bundler (1.2.0.pre)
+          Your bundle is complete! It was installed into ./vendor/bundle
+          Cleaning up the bundler cache.
+   -----> Discovering process types
+          Procfile declares types     -> (none)
+          Default types for Ruby/Rack -> console, rake, web
+   -----> Compiled slug size is 364K
+   -----> Launching... done, v3
+          http://smooth-flower-9514.herokuapp.com deployed to Heroku
+   
+   To git@heroku.com:smooth-flower-9514.git
+   * [new branch]      master -> master
+  mjp@uberwald:~/src/phelanm.mooo.com$ curl "http://smooth-flower-9514.herokuapp.com"
+   <html><head><title>phelanm.mooo.com</title></head><body>phelanm, thanks <a href="http://freedns.afraid.org"> afraid.org</a></body></html>
+
+ ##  push to github
+  #   add new repo
+   https://github.com/phelanm
+    https://github.com/new
+     https://github.com/phelanm/phelanm.mooo.com
+   cd ~/src/phelanm.mooo.com
+   git config --global user.name "mark phelan"
+   git config --global user.email phelanm@gmail.com
+   git remote add origin https://github.com/phelanm/phelanm.mooo.com.git
+   git push -u origin master
+    Username for 'https://github.com': phelanm
+    Password for 'https://phelanm@github.com': 
+    To https://github.com/phelanm/phelanm.mooo.com.git
+     * [new branch]      master -> master
+    Branch master set up to track remote branch master from origin.
+
+ ##  update phelanm.mooo.com
+  http://freedns.afraid.org/subdomain/
+   <phelanm.mooo.com>
+    http://freedns.afraid.org/subdomain/edit.php?data_id=7414180&action=redirect
+     redirect to: http://smooth-flower-9514.herokuapp.com
+     [x] cloak?
+     page title: phelanm.mooo.com
+     <save>
+
+  curl "http://phelanm.mooo.com"
+   <html>
+   <head>
+   <title>phelanm.mooo.com</title>
+   <!-- This site "phelanm.mooo.com" is using the free URL redirection service at http://freedns.afraid.org/ -->
+   <!-- The real (cloaked URL) site can be found directly at http://smooth-flower-9514.herokuapp.com -->
+   <!-- Please report any abuse of this free service -->
+   <frameset frameborder="0" border="0" rows="*,100%" cols="100%" marginwidth="0" marginheight="0">
+       <frame target="random_name_not_taken1" name="random_name_not_taken1" marginwidth="0" marginheight="0" border="0" noresize scrolling="no">
+       <frame target="random_name_not_taken2" name="random_name_not_taken2" src="http://smooth-flower-9514.herokuapp.com" border="0" noresize>
+       <noframes>
+           <a href="http://smooth-flower-9514.herokuapp.com">phelanm.mooo.com</a>
+       </noframes>
+   </frameset>
+   </html>
+   </html>
+  
+  curl "http://smooth-flower-9514.herokuapp.com"
+   <html><head><title>phelanm.mooo.com</title></head><body>phelanm, thanks <a href="http://freedns.afraid.org"> afraid.org</a></body></html>
+  
